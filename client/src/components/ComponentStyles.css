@@ -1,0 +1,57 @@
+.CoinCompStyle1{
+  text-indent: 5%;
+  color: #000000;/*#8601af*/
+  border-style: solid;
+  border-spacing: 150px;
+  padding-bottom: 40px;
+  font-size: 16px;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.CoinSymbol{
+  width: 100px;
+  height: 50px;
+  position: left;
+}
+
+.AddressTile{
+  position: relative;
+  width: 75%;
+  height: 390%;
+  color: red;
+}
+
+.GridGap1{
+  grid-column-gap: 450px;
+  grid-row-gap: 950px;
+  color: red;
+}
+
+.TitleStyle{
+  color: black;
+  background-color: fffafa;  
+}
+
+.ScrollStyle{
+  position: absolute;
+  top: 200px;
+  bottom: 50px;
+  width: 100%;
+}
+
+.PaperStyle{
+  text-align: 'left';
+  /*backgroundColor: theme.palette.text.primary,*/
+  background-color: red;
+  color: red;
+  margin-left: 2px;
+  margin-right: 12px;
+  margin-bottom: 24px;
+
+}
+
+.SendStyle1{
+  background-color: red;
+  width: 70%;
+  height: 100px;
+}
