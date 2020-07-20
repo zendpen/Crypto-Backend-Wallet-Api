@@ -33,18 +33,24 @@ function createAccount(password){
 
 function retrieveAccount(password){
     return new Promise(resolve => {
+        try{
         let data = fs.readFileSync('keys.dat', 'utf8');
         let user = UserClass.from(JSON.parse(data.toString()));
         console.log("outside read file: ", user);
         // Decrypt
         var bytes  = CryptoJS.AES.decrypt(user.keys, password);
-        //console.log(bytes);
+        console.log("Bytes: ", bytes);
         var originalText = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
         keys = originalText;
         console.log("keys", keys);
         setTimeout(() => {
             resolve('resolved');
           }, 4000);
+        }
+        catch(error){
+            console.log("eerrr");
+            resolve(false);
+        }
         //resolve(true);
     });
 }
@@ -55,23 +61,34 @@ async function getAddress(coin){
         case "BCH":
         case "ZEC":
         case "ETH":
-            const account = new CryptoAccount(keys.sendCryptoPrivateKey);
-            let address = await account.address(coin);
-            return address;
+            try{
+              const account = new CryptoAccount(keys.sendCryptoPrivateKey);
+              let address = await account.address(coin);
+              return address;
+            }
+            catch(error){
+                //console.log("hello");
+                return false;
+            }
     }
 }
 
 async function getBalance(coin){
-    switch (coin){
-        case "BTC":
-        case "BCH":
-        case "ZEC":
-        case "ETH":
-            const account = new CryptoAccount(keys.sendCryptoPrivateKey); 
-            let bal = await account.getBalance(coin);
-            return bal;
+    try{
+      switch (coin){
+          case "BTC":
+          case "BCH":
+          case "ZEC":
+          case "ETH":
+              const account = new CryptoAccount(keys.sendCryptoPrivateKey); 
+              let bal = await account.getBalance(coin);
+              return bal;
         default:
             throw "Coin not found! " + coin;
+      }
+    }
+    catch(error){
+        return false;
     }
 }
 

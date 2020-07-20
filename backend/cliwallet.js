@@ -120,6 +120,11 @@ async function createAccountFunction(input){
 
 async function loginFunction(input){
     const c = await crypt.retrieveAccount(input);
+    if(!c){
+        print("Error logging in");
+        mainLogin();
+        //return;
+    }
     console.log("cc: ", c);
     mainHomePage();
 }

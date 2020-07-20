@@ -1,0 +1,18 @@
+.center{
+  width: 40%;
+  margin-left: 30%;
+  margin-right: 30%
+}
+
+.buttonClass{
+  width: 200px;
+  height: 200px;
+}
+
+.spaceDiv{
+  height: 40px;
+}
+
+.borderDiv{
+  border-style: solid;
+}
