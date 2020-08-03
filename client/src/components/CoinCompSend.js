@@ -73,7 +73,7 @@ class CoinCompSend extends React.Component{
 
   if(this.state.page === "full"){
     return <div>
-	<Button variant="contained" color="primary" onClick={() => { this.setState({page: "scanPage"})}}>
+	<Button variant="contained" className="ScanButtonClass" color="primary" onClick={() => { this.setState({page: "scanPage"})}}>
           Scan
         </Button>
 	<InfiniteScroll

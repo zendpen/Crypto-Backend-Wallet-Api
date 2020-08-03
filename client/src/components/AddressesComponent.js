@@ -1,17 +1,24 @@
 //Component shows addresses in a grid style
 import React from 'react';
+import Button from '@material-ui/core/Button';
 import GridList from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import tileData from './tileData';
-import btcImg from './images/btc.png';
 import './ComponentStyles.css';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import InfiniteScroll from "react-infinite-scroll-component";
 import './ComponentStyles.css';
 import QRCode from 'qrcode.react';
+import btcImg from './images/btc.png';
+import bchImg from './images/bch.png';
+import ethImg from './images/eth.png';
+import zecImg from './images/zec.png';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,11 +44,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function getImage(coin){
+  if(coin === "BTC")
+    return btcImg;
+  else if(coin === "BCH")
+    return bchImg;
+  else if(coin === "ETH")
+    return ethImg;
+  else if(coin === "ZEC")
+    return zecImg;
+  else
+    return "null";
+}
+
+
 
 export default function AddressesComponent(props){
   const classes = useStyles();
   if(props.showTile === true)
     return(<div>
+      <IconButton aria-label="delete" color="primary" variant="contained" component="span" 
+            onClick={() => { props.backClick(props); }}>
+            <ArrowBackIcon />
+          </IconButton>
+
       <Paper className={classes.paperTile} > {props.receiveTileObj.name} <p>{props.receiveTileObj.address}</p> <QRCode value={props.receiveTileObj.address + "|hello"} /> </Paper>
     </div>);
   return(
@@ -61,7 +87,19 @@ export default function AddressesComponent(props){
 
 	{props.list.map((tile, index) =>
 	  
-	    <Paper key={index} className={classes.paper} onClick={() => { props.tileClick(tile); console.log("hello"); }}> <img src={btcImg} alt="btc" className="CoinSymbol" />  {tile.name}</Paper>
+	    //<Paper key={index} className={classes.paper} onClick={() => { props.tileClick(tile); console.log("hello"); }}> <img src={btcImg} alt="btc" className="CoinSymbol" />  {tile.name}</Paper>
+	    <div className="CoinCompStyle1">
+      		<img src={getImage(tile.name)} alt="btc" className="CoinSymbol" />
+      		<div className="CoinCompHeader1">Bitcoin</div>
+      		<div className="CoinCompText1">
+      		{tile.name} : {tile.bal}</div>
+      		<Button className="HomeButtonEx" variant="contained" color="primary" onClick={() => { props.tileClick(tile); console.log("hello"); }}>
+        		Show QR
+      		</Button>
+
+    </div>
+
+
  	)}
       </InfiniteScroll>
     </div>

@@ -4,6 +4,10 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import btcImg from './images/btc.png';
+import bchImg from './images/bch.png';
+import ethImg from './images/eth.png';
+import zecImg from './images/zec.png';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,10 +33,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function getImage(coin){
+  if(coin === "BTC")
+    return btcImg;
+  else if(coin === "BCH")
+    return bchImg;
+  else if(coin === "ETH")
+    return ethImg;
+  else if(coin === "ZEC")
+    return zecImg;
+  else
+    return "null";
+}
+
+
 export default function SendTile(props){
   const classes = useStyles();
+  //return(
+    //<Paper className={classes.paper} onClick={() => { props.clickFunction(props.tile); console.log("hello"); }} > {props.tile.name} : {props.tile.bal} </Paper>
+  //);
   return(
-    <Paper className={classes.paper} onClick={() => { props.clickFunction(props.tile); console.log("hello"); }} > {props.tile.name} : {props.tile.bal} </Paper>
+    <div className="CoinCompStyle1">
+      <img src={getImage(props.tile.name)} alt="btc" className="CoinSymbol" />
+      <div className="CoinCompHeader1">Bitcoin</div>
+      <div className="CoinCompText1">
+      {props.tile.name} : {props.tile.bal}</div>
+      <Button className="HomeButtonBuy" variant="contained" color="primary" onClick={() => { props.clickFunction(props.tile); console.log("hello", props.tile); }}>
+        Send
+      </Button>
+
+    </div>
   );
 
 }

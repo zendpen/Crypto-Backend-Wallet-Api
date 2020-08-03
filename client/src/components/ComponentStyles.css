@@ -1,17 +1,33 @@
 .CoinCompStyle1{
   text-indent: 5%;
   color: #000000;/*#8601af*/
-  border-style: solid;
+  border-top-style: solid;
+  border-right-style: solid;
   border-spacing: 150px;
   padding-bottom: 40px;
+  font-size: 12px;
+  font-family: "OCR A Std", monospace;
+}
+
+.CoinCompText1{
   font-size: 16px;
-  font-family: "Lucida Console", Courier, monospace;
+  position: relative;
+  margin-left: 50%;
+}
+
+.CoinCompHeader1{
+  font-size: 20px;
+  position: relative;
+  margin-left: 0%;
+  margin-top: 2%;
 }
 
 .CoinSymbol{
   width: 100px;
   height: 50px;
-  position: left;
+  position: relative;
+  margin-left: 0%;
+  float: left;
 }
 
 .AddressTile{
@@ -34,7 +50,7 @@
 
 .ScrollStyle{
   position: absolute;
-  top: 200px;
+  top: 120px;
   bottom: 50px;
   width: 100%;
 }
@@ -54,4 +70,31 @@
   background-color: red;
   width: 70%;
   height: 100px;
+}
+
+.HomeButtonBuy{
+  position: relative;
+  left: 0%;
+  width: 100px;
+  height: 50px;
+}
+
+.HomeButtonSell{
+  position: relative;
+  left: 2%;
+  width: 100px;
+  height: 50px;
+}
+
+.HomeButtonEx{
+  position: relative;
+  left: 4%;
+  width: 100px;
+  height: 50px;
+}
+
+.ScanButtonClass{
+  position: relative;
+  left: 70%;
+  bottom: 40px;
 }

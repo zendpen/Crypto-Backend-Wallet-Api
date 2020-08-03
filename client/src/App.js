@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import MainPage from './MainPage';
 import HomeTotal from './components/HomeTotal';
 import CoinCompHome from './components/CoinCompHome';
 import CoinCompSend from './components/CoinCompSend';
@@ -87,19 +88,24 @@ receiveTileClick = value => {
   this.setState({showReceiveTile: true, receiveTileObj: value});
 }
 
+receiveBackClick = value => {
+  this.setState({showReceiveTile: false });
+}
+
 render(){
 
-  if(!this.state.isLoggedIn){
-    if(this.state.showSplashScreen){
+    if(this.state.currentPage != "0" && !this.state.isLoggedIn){
+      if(this.state.showSplashScreen){
+      return(
+          <div>
+            <p>splash screen</p>
+          </div>
+        );
+      }
       return(
 	<div>
-	  <p>splash screen</p>
-	</div>
-      );
-    }
-    return (
-      <div className="App">
-         <p>{this.state.response}</p>
+	  <p>Not logged in. please log in</p>
+	  <p>{this.state.response}</p>
           <form onSubmit={this.handleSubmit}>
             <p>
               <strong>Post to Server:</strong>
@@ -112,12 +118,13 @@ render(){
             <button type="submit">Submit</button>
           </form>
           <p>{this.state.responseToPost}</p>
-      </div>
-    );
-  }
 
-  else{
-    if(this.state.currentPage === "0"){
+	  <Demo setChanged={this.setPageChange} />
+	</div>
+      );
+    }
+
+    if(this.state.currentPage === "1"){
       return(
         <div>
 	  <Title />
@@ -143,10 +150,25 @@ render(){
         </div>
       );
     }
-    else if(this.state.currentPage === "1"){
+    else if(this.state.currentPage === "0"){
       return(
 	<div>
-	  <p>Coin bag next screen</p>
+	<Title />
+	<InfiniteScroll
+            dataLength={this.state.responseToPost.length}
+            next={this.fetchMoreData}
+            hasMore={this.state.scrollHasMore}
+	    
+            className={"ScrollStyle"}
+
+            endMessage={
+              <p style={{ textAlign: "center" }}>
+                <b>End List</b>
+              </p>
+            }
+          >
+	  <MainPage />
+	</InfiniteScroll>
 	  <Demo setChanged={this.setPageChange} />
 	</div>
       );
@@ -165,7 +187,7 @@ render(){
       return(
 	<div>
 	  <Title />
-	  <AddressesComponent list={this.state.responseToPost} tileClick = {this.receiveTileClick} showTile={this.state.showReceiveTile} receiveTileObj={this.state.receiveTileObj} />
+	  <AddressesComponent list={this.state.responseToPost} backClick = {this.receiveBackClick} tileClick = {this.receiveTileClick} showTile={this.state.showReceiveTile} receiveTileObj={this.state.receiveTileObj} />
 	  <Demo setChanged={this.setPageChange} />
 	</div>
       );
@@ -178,7 +200,7 @@ render(){
 	</div>
       );
     }
-  }
+  
 }//end of render method
 }
 
