@@ -34,7 +34,7 @@ function CoinCompHome(props){
   //}
   return <div className="CoinCompStyle1">
       <img src={getImage(props.coin)} alt="btc" className="CoinSymbol" />
-      <div className="CoinCompHeader1">Bitcoin</div>
+      <div className="CoinCompHeader1">{props.fullName}</div>
       <div className="CoinCompText1">
       {props.coin} : {props.balance}</div>
       <div className="CoinCompText1">${props.balInUSD.toFixed(2)}</div>

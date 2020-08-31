@@ -68,7 +68,8 @@ function getRecAddress(){
 }
 
 async function sendCoin(address, amount, coin){
-    let tx = crypt.sendCoins(address, amount, coin);
+    let tx = await crypt.sendCoins(address, amount, coin);
+    console.log("send tx: ", tx);
 }
 
 async function getAddresses(){

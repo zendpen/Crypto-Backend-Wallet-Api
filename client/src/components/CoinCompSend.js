@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import SendTile from './SendTile';
 import InfiniteScroll from "react-infinite-scroll-component";
- 
+import Popup from 'reactjs-popup';
 
 class CoinCompSend extends React.Component{
   constructor(props){
@@ -19,12 +19,15 @@ class CoinCompSend extends React.Component{
       value: '0.05',
       page: props.showPage,
       qrResult: '',
+      tileObj: '',
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleAddressInputChange = this.handleAddressInputChange.bind(this);
     this.cancelButtonClick = this.cancelButtonClick.bind(this);
     this.continueButtonClick = this.continueButtonClick.bind(this);
     this.confirmButtonClick = this.confirmButtonClick.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
 
@@ -32,7 +35,7 @@ class CoinCompSend extends React.Component{
     let page = 'btc';
     console.log("function running", obj);
     //this.props.buttonClick(page);
-    this.setState({page: "sendPage"});
+    this.setState({page: "sendPage", tileObj: obj});
     console.log("logging:", this.state.page);
   };
 
@@ -56,6 +59,7 @@ class CoinCompSend extends React.Component{
   confirmButtonClick(){
     //console.log("confirm button clicl");
     this.props.buttonClick({address: this.state.address, amount: this.state.amount});
+    this.openModal();
   }
 
   handleScan = data => {
@@ -69,10 +73,23 @@ class CoinCompSend extends React.Component{
     console.error(err)
   }
 
+  openModal() {
+    this.setState({ open: true });
+  }
+  closeModal() {
+    let p = '';
+    if(this.state.sendMsg === "success")
+      p = "full";
+    else
+      p = "sendPage";
+    this.setState({ open: false, page: p });
+  }
+
   render(){
 
   if(this.state.page === "full"){
     return <div>
+	<p>Coins available to send.</p>
 	<Button variant="contained" className="ScanButtonClass" color="primary" onClick={() => { this.setState({page: "scanPage"})}}>
           Scan
         </Button>
@@ -90,7 +107,7 @@ class CoinCompSend extends React.Component{
           >
 
         {this.props.list.map((obj, index) => (
-	  <div >{obj.bal > 0 &&
+	  <div >{obj.bal > -1 &&
 	  <div>
 	  <SendTile tile={obj} clickFunction={this.doSomething} />
 	  </div>
@@ -115,10 +132,10 @@ class CoinCompSend extends React.Component{
 
   else if(this.state.page === "sendPage"){
     return <div>
+      <p> Available {this.state.tileObj.name}: {this.state.tileObj.bal}</p>
       <p> Enter Amount: {this.props.showPage}
         <input type="text" value={this.state.amount} onChange={this.handleInputChange}  />
       </p>
-      <p>{} BTC</p>
       <p> Enter Recipient Address:
 	<input type="text" value={this.state.address} onChange={this.handleAddressInputChange}  />
       </p>
@@ -135,7 +152,7 @@ class CoinCompSend extends React.Component{
 
   else if(this.state.page === "confirm"){
     return <div>
-      <p>Confirm Payment</p>
+      <p>Confirm {this.state.tileObj.name} Payment</p>
       <p>Amount: {this.state.amount}</p>
       <p>To address: {this.state.address}</p>
       <Button variant="contained" color="primary" onClick={() => { this.setState({page: "sendPage"})}}>
@@ -144,6 +161,18 @@ class CoinCompSend extends React.Component{
       <Button variant="contained" color="primary" onClick={() => { this.confirmButtonClick() }}>
         Confirm
       </Button>
+      <Popup
+          open={this.state.open}
+          closeOnDocumentClick
+          onClose={this.closeModal}
+        >
+          <div className="modal">
+            <a className="close" onClick={this.closeModal}>
+              &times;
+            </a>
+            {this.props.sendMsg}
+          </div>
+        </Popup>
     </div>
     ;
   }//end else if

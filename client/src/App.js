@@ -24,6 +24,7 @@ class App extends Component {
     scrollHasMore: true,
     showReceiveTile: false,
     receiveTileObj: '',
+    sendMsg: '',
   };
    componentDidMount() {
     this.callApi()
@@ -68,8 +69,9 @@ class App extends Component {
       },
       body: JSON.stringify({ post: obj }),
     });
-    //const body = await response.text();
-    //console.log(body);
+    const body = await response.text();
+    console.log("sending  coin body: ", body);
+    this.setState({sendMsg: body });
   };
 
 setPageChange = newValue => {
@@ -79,7 +81,7 @@ setPageChange = newValue => {
 
 sendButtonClick = newValue => {
   console.log("sendButonCLick", newValue);
-  //this.setState({sendPageVar: newValue});
+  this.setState({sendMsg: 'loading'});
   this.handleSendCoin(newValue);
 }
 
@@ -142,7 +144,7 @@ render(){
 	    }
 	  >
 	  {this.state.responseToPost.map((obj, index) => (
-	    <CoinCompHome key = {index} coin = {obj.name} balance = {obj.bal} balInUSD = {obj.balInUSD} />
+	    <CoinCompHome key = {index} coin = {obj.name} balance = {obj.bal} balInUSD = {obj.balInUSD} fullName = {obj.fullName} />
 	  ))}
 	  </InfiniteScroll>
 	  </div>
@@ -177,9 +179,8 @@ render(){
       return(
 	<div>
 	  <Title />
-	  <p>Coins available to send. </p>
 	  <Demo setChanged={this.setPageChange} />
-	  <CoinCompSend showPage = {this.state.sendPageVar} list = {this.state.responseToPost} buttonClick = {this.sendButtonClick}/>
+	  <CoinCompSend showPage = {this.state.sendPageVar} list = {this.state.responseToPost} buttonClick = {this.sendButtonClick} sendMsg = {this.state.sendMsg} />
 	</div>
       );
     }

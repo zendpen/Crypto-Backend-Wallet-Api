@@ -138,19 +138,28 @@ async function getTotalBalanceInUSD(){
 }
 
 async function sendCoins(address, amount, coin){
-    switch (coin){
-        case "BTC":
-        case "BCH":
-        case "ZEC":
-        case "ETH":
-            const account = new CryptoAccount(keys.sendCryptoPrivateKey);
-            const txHash = await account.send(address, amount, coin)
-            .on("transactionHash", console.log)
-            // > "3387418aaddb4927209c5032f515aa442a6587d6e54677f08a03b8fa7789e688"
-            .on("confirmation", console.log);
-            return txHash;
-        default:
-            throw "Coin not found! " + coin;
+    try{
+        switch (coin){
+            case "BTC":
+            case "BCH":
+            case "ZEC":
+            case "ETH":
+                const account = new CryptoAccount(keys.sendCryptoPrivateKey);
+                const txHash = await account.send(address, amount, coin)
+                .on("transactionHash", console.log)
+                // > "3387418aaddb4927209c5032f515aa442a6587d6e54677f08a03b8fa7789e688"
+                .on("confirmation", console.log);
+                return txHash;
+            default:
+                throw "Coin not found! " + coin;
+        }
+    }
+    catch(e){
+        let c = e.toString().substring(0, 40);
+        console.log(c);
+        if(c === 'Error: Insufficient balance to broadcast')
+            return 'Insufficient Balance';
+        return 'error thrown';
     }
 }
 

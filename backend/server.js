@@ -30,10 +30,10 @@ async function getAccount(req, res){
     //let usdBal = await crypt.getTotalBalanceInUSD();
     let totalBalUSD = btcInUSD + bchInUSD + ethInUSD + zecInUSD;
     let array = [];
-    let btcObj = createHomeObj("BTC", btcBal, btcInUSD, btcAddr);
-    let bchObj = createHomeObj("BCH", bchBal, bchInUSD, bchAddr);
-    let ethObj = createHomeObj("ETH", ethBal, ethInUSD, ethAddr);
-    let zecObj = createHomeObj("ZEC", zecBal, zecInUSD, zecAddr);
+    let btcObj = createHomeObj("BTC", btcBal, btcInUSD, btcAddr, "Bitcoin");
+    let bchObj = createHomeObj("BCH", bchBal, bchInUSD, bchAddr, "Bitcoin Cash");
+    let ethObj = createHomeObj("ETH", ethBal, ethInUSD, ethAddr, "Ethereum");
+    let zecObj = createHomeObj("ZEC", zecBal, zecInUSD, zecAddr, "Zcash");
     array.push(btcObj)
     array.push(bchObj);
     array.push(ethObj);
@@ -55,10 +55,11 @@ async function getAccount(req, res){
 
 async function getSendCoin(req, res){
   let txHash = await crypt.sendCoins(req.body.post.address, req.body.post.amount, 'BTC');
+  res.send(txHash);
 }
 
-function createHomeObj(name, bal, balInUSD, address){
-  return {name: name, bal: bal, balInUSD: balInUSD, address: address};
+function createHomeObj(name, bal, balInUSD, address, fullName){
+  return {name: name, bal: bal, balInUSD: balInUSD, address: address, fullName: fullName};
 }
 
 app.post('/api/world', (req, res) => {
@@ -78,7 +79,6 @@ app.post('/api/worlds', (req, res) => {
   app.post('/api/sendCoin', (req, res) => {
     console.log(req.body);
     getSendCoin(req, res);
-    
   });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

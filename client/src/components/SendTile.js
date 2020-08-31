@@ -55,7 +55,7 @@ export default function SendTile(props){
   return(
     <div className="CoinCompStyle1">
       <img src={getImage(props.tile.name)} alt="btc" className="CoinSymbol" />
-      <div className="CoinCompHeader1">Bitcoin</div>
+      <div className="CoinCompHeader1">{props.tile.fullName}</div>
       <div className="CoinCompText1">
       {props.tile.name} : {props.tile.bal}</div>
       <Button className="HomeButtonBuy" variant="contained" color="primary" onClick={() => { props.clickFunction(props.tile); console.log("hello", props.tile); }}>

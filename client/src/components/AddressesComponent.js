@@ -90,7 +90,7 @@ export default function AddressesComponent(props){
 	    //<Paper key={index} className={classes.paper} onClick={() => { props.tileClick(tile); console.log("hello"); }}> <img src={btcImg} alt="btc" className="CoinSymbol" />  {tile.name}</Paper>
 	    <div className="CoinCompStyle1">
       		<img src={getImage(tile.name)} alt="btc" className="CoinSymbol" />
-      		<div className="CoinCompHeader1">Bitcoin</div>
+      		<div className="CoinCompHeader1">{tile.fullName}</div>
       		<div className="CoinCompText1">
       		{tile.name} : {tile.bal}</div>
       		<Button className="HomeButtonEx" variant="contained" color="primary" onClick={() => { props.tileClick(tile); console.log("hello"); }}>
