@@ -13,9 +13,15 @@ const CoinGeckoClient = new CoinGecko();
 let keys = null;
 let coinPrices = [];
 
-function createAccount(password){
+function createAccountOG(){
     return new Promise(resolve => {
         let key = new KeyClass('password');
+        console.log(key);
+	return key;
+	setTimeout(() => {
+	  resolve('resolve');
+	}, 4000);
+	/*
         // Encrypt
         let ciphertext = CryptoJS.AES.encrypt(JSON.stringify(key), password).toString();
         let user = new UserClass('password', ciphertext);
@@ -28,7 +34,20 @@ function createAccount(password){
         setTimeout(() => {
             resolve('resolved');
           }, 4000);
+	*/
     });
+}
+
+async function createAccount(){
+  let key = new KeyClass('password');
+  const account = new CryptoAccount(key.sendCryptoPrivateKey);
+  let btcAddress = await account.address("BTC");
+  let bchAddress = await account.address("BCH");
+  let zecAddress = await account.address("ZEC");
+  let ethAddress = await account.address("ETH");
+  key.setFourKeys(btcAddress, bchAddress, zecAddress, ethAddress);
+  console.log(key);
+  return key;
 }
 
 function retrieveAccount(password){
@@ -73,15 +92,16 @@ async function getAddress(coin){
     }
 }
 
-async function getBalance(coin){
+async function getBalance(coin, privateKey){
     try{
       switch (coin){
           case "BTC":
           case "BCH":
           case "ZEC":
           case "ETH":
-              const account = new CryptoAccount(keys.sendCryptoPrivateKey); 
+              const account = new CryptoAccount(privateKey);
               let bal = await account.getBalance(coin);
+	      console.log("getBalance: ", bal);
               return bal;
         default:
             throw "Coin not found! " + coin;
@@ -120,7 +140,7 @@ async function setCoinPrices(){
         eth: await CoinGeckoClient.coins.fetch('ethereum', {}),
         zec: await CoinGeckoClient.coins.fetch('zcash', {})
       };
-      console.log("set prices", prices);
+      //console.log("set prices", prices);
       coinPrices = prices;
 }
 
@@ -137,28 +157,37 @@ async function getTotalBalanceInUSD(){
   return btcBal * usdPrice;
 }
 
-async function sendCoins(address, amount, coin){
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+async function sendCoins(privateKey, receiverAddress, amount, coin){
     try{
         switch (coin){
             case "BTC":
             case "BCH":
             case "ZEC":
             case "ETH":
-                const account = new CryptoAccount(keys.sendCryptoPrivateKey);
-                const txHash = await account.send(address, amount, coin)
+                const account = new CryptoAccount(privateKey);
+                const txHash = await account.send(receiverAddress, amount, coin)
                 .on("transactionHash", console.log)
                 // > "3387418aaddb4927209c5032f515aa442a6587d6e54677f08a03b8fa7789e688"
                 .on("confirmation", console.log);
-                return txHash;
+		await delay(5000);
+		let bal = await getBalance(coin, privateKey);
+		let USDBal = await getBalanceInUSD(coin, bal);
+		let result = {hash: txHash, bal: bal, balInUSD: USDBal, coin: coin};
+                return result;
             default:
                 throw "Coin not found! " + coin;
         }
     }
     catch(e){
         let c = e.toString().substring(0, 40);
+	console.log("Error being thrown in catch of sendCoins Crpto.js");
         console.log(c);
         if(c === 'Error: Insufficient balance to broadcast')
             return 'Insufficient Balance';
+	else if(c === 'InvalidAddressError: Received an invalid')
+	  return 'Invalid Address';
         return 'error thrown';
     }
 }
@@ -190,5 +219,5 @@ async function asyncCall(){
     //console.log(c);
 }
 
-
+//createAccount('password');
 //asyncCall();
