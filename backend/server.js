@@ -142,7 +142,7 @@ app.post('/api/worlds', (req, res) => {
 //app.listen(port, () => console.log(`Listening on port ${port}`));
 //THE ONE BELOW IS THE ONE FOR LOCAL SERVER
 //http.createServer(app).listen(port, '192.168.0.22', () => console.log(`Listening on port ${port}`));
-http.createServer(app).listen('5000', () => console.log(`Listening on port ` ));
+http.createServer(app).listen(port, () => console.log(`Listening on port ` ));
 
 /*const server = http.createServer((req, res) => {
   res.statusCode = 200;
