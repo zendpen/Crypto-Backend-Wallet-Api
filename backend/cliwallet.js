@@ -77,22 +77,26 @@ async function getAddresses(){
     let bchAddress = await crypt.getAddress("BCH");
     let zecAddress = await crypt.getAddress("ZEC");
     let ethAddress = await crypt.getAddress("ETH");
+    //let filAddress = await crypt.getAddress("FIL");
     console.log("btcaddr: ", btcAddress);
     console.log("bchaddr: ", bchAddress);
     console.log("zecaddr: ", zecAddress);
     console.log("ethAddr: ", ethAddress);
+    //console.log("filAddr: ", filAddress);
     mainHomePage();
 }
 
 async function getBalances(){
-    let btcBal = await crypt.getBalance("BTC");
-    let bchBal = await crypt.getBalance("BCH");
-    let zecBal = await crypt.getBalance("ZEC");
-    let ethBal = await crypt.getBalance("ETH");
+    let btcBal = await crypt.getCliBalance("BTC");
+    let bchBal = await crypt.getCliBalance("BCH");
+    let zecBal = await crypt.getCliBalance("ZEC");
+    let ethBal = await crypt.getCliBalance("ETH");
+    //let filBal = await crypt.getCliBalance("FIL");
     console.log("btcBal: ", btcBal);
     console.log("bch: ", bchBal);
     console.log("zec: ", zecBal);
     console.log("eth: ", ethBal);
+    //console.log("fil: ", filBal);
     mainHomePage();
 }
 

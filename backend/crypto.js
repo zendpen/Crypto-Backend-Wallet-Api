@@ -40,13 +40,15 @@ function createAccountOG(){
 
 async function createAccount(){
   let key = new KeyClass('password');
+  console.log("funciton runninhg");
   const account = new CryptoAccount(key.sendCryptoPrivateKey);
   let btcAddress = await account.address("BTC");
   let bchAddress = await account.address("BCH");
   let zecAddress = await account.address("ZEC");
   let ethAddress = await account.address("ETH");
+  //let filAddress = await account.address("FIL");
   key.setFourKeys(btcAddress, bchAddress, zecAddress, ethAddress);
-  console.log(key);
+  //console.log(key);
   return key;
 }
 
@@ -55,13 +57,13 @@ function retrieveAccount(password){
         try{
         let data = fs.readFileSync('keys.dat', 'utf8');
         let user = UserClass.from(JSON.parse(data.toString()));
-        console.log("outside read file: ", user);
+        //console.log("outside read file: ", user);
         // Decrypt
         var bytes  = CryptoJS.AES.decrypt(user.keys, password);
-        console.log("Bytes: ", bytes);
+        //console.log("Bytes: ", bytes);
         var originalText = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
         keys = originalText;
-        console.log("keys", keys);
+        //console.log("keys", keys);
         setTimeout(() => {
             resolve('resolved');
           }, 4000);
@@ -80,6 +82,7 @@ async function getAddress(coin){
         case "BCH":
         case "ZEC":
         case "ETH":
+	//case "FIL":
             try{
               const account = new CryptoAccount(keys.sendCryptoPrivateKey);
               let address = await account.address(coin);
@@ -92,6 +95,10 @@ async function getAddress(coin){
     }
 }
 
+async function getCliBalance(coin){
+  return getBalance(coin, keys.sendCryptoPrivateKey);
+}
+
 async function getBalance(coin, privateKey){
     try{
       switch (coin){
@@ -99,6 +106,7 @@ async function getBalance(coin, privateKey){
           case "BCH":
           case "ZEC":
           case "ETH":
+	  //case "FIL":
               const account = new CryptoAccount(privateKey);
               let bal = await account.getBalance(coin);
 	      console.log("getBalance: ", bal);
@@ -108,7 +116,8 @@ async function getBalance(coin, privateKey){
       }
     }
     catch(error){
-        return false;
+  	console.log("Error: ", error);
+        return error;
     }
 }
 
@@ -192,7 +201,7 @@ async function sendCoins(privateKey, receiverAddress, amount, coin){
     }
 }
 
-module.exports = {createAccount, retrieveAccount, getBalance, getAddress, sendCoins,
+module.exports = {createAccount, retrieveAccount, getBalance, getCliBalance, getAddress, sendCoins,
 			getBalanceInUSD, getTotalBalanceInUSD, setCoinPrices
 };
 
@@ -219,5 +228,4 @@ async function asyncCall(){
     //console.log(c);
 }
 
-//createAccount('password');
 //asyncCall();
