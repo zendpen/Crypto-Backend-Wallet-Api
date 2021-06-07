@@ -5,6 +5,7 @@ const crypt = require("./crypto.js");
 const app = express();
 const port = process.env.PORT || 3000;
 const http = require('http');
+const https = require('https');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -142,7 +143,10 @@ app.post('/api/worlds', (req, res) => {
 //app.listen(port, () => console.log(`Listening on port ${port}`));
 //THE ONE BELOW IS THE ONE FOR LOCAL SERVER
 //http.createServer(app).listen(port, '192.168.0.22', () => console.log(`Listening on port ${port}`));
-http.createServer(app).listen(port, () => console.log(`Listening on port ` ));
+//http.createServer(app).listen(port, () => console.log(`Listening on port ` ));
+
+//below https above http
+https.createServer(app).listen(3000, '192.168.0.22', () => console.log(`Listening on port ${port} `));
 
 /*const server = http.createServer((req, res) => {
   res.statusCode = 200;
